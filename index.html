@@ -159,21 +159,17 @@
     <aside class="w-80 md:w-88 glass-panel border-r border-white/60 dark:border-slate-800 flex flex-col shrink-0">
         <div class="flex-1 overflow-y-auto p-4 md:p-5 space-y-4">
             
-            <!-- WIDGET TIỆN ÍCH ĐIỀU HƯỚNG NHANH (MÀU PASTEL KHÁC NHAU) -->
+            <!-- WIDGET TIỆN ÍCH ĐIỀU HƯỚNG NHANH -->
             <div class="bg-gradient-to-br from-sky-50/90 via-purple-50/80 to-pink-50/90 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-3 rounded-2xl border border-sky-100/80 dark:border-slate-700 shadow-glass-sm space-y-2">
-             
                 <div class="grid grid-cols-3 gap-1.5">
-                    <!-- Nút Trang chủ Pastel Sky -->
                     <button onclick="switchToHomeTab()" id="widget-home-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-sky-100 hover:bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 shadow-xs hover:scale-[1.02]">
                         <i data-lucide="home" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
                         <span class="text-[11px]">Trang chủ</span>
                     </button>
-                    <!-- Nút Tải Video Pastel Mint -->
                     <button onclick="switchToUploadTab()" id="widget-upload-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 shadow-xs hover:scale-[1.02]">
                         <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
                         <span class="text-[11px]">Tải Video</span>
                     </button>
-                    <!-- Nút Cập nhật Pastel Purple -->
                     <button onclick="forceRefreshData()" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 shadow-xs hover:scale-[1.02]">
                         <i data-lucide="refresh-cw" class="w-4 h-4 text-purple-600 dark:text-purple-400"></i>
                         <span class="text-[11px]">Cập nhật</span>
@@ -193,7 +189,6 @@
                     </span>
                 </div>
 
-                <!-- Ma trận 2 cột -->
                 <div id="class-list-container" class="grid grid-cols-2 gap-2">
                     <!-- Dynamic Classes Matrix List -->
                 </div>
@@ -214,7 +209,7 @@
     <!-- MAIN WORKSPACE -->
     <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-white/20 dark:bg-slate-950/20">
 
-        <!-- HEADER WORKSPACE BAR (ĐÃ BỎ 2 NÚT CẬP NHẬT VÀ TẢI LÊN VIDEO) -->
+        <!-- HEADER WORKSPACE BAR -->
         <div class="p-4 md:p-5 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md">
             <div class="space-y-1">
                 <div class="flex items-center gap-2.5">
@@ -232,13 +227,11 @@
                 <!-- SEARCH & FILTER MONTH BAR -->
                 <div class="flex flex-wrap items-center justify-between gap-3 bg-white/60 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-glass-sm backdrop-blur-md">
                     <div class="flex items-center gap-3 flex-1 min-w-[280px]">
-                        <!-- Search Box -->
                         <div class="relative flex-1">
                             <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             <input type="text" id="search-video-input" onkeyup="filterVideos()" placeholder="Tìm tên video bài giảng..." class="w-full pl-10 pr-4 py-2 glass-input rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:border-sky-500 shadow-2xs">
                         </div>
 
-                        <!-- Dropdown Filter Month -->
                         <div class="relative shrink-0">
                             <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-sky-500 z-10 pointer-events-none"></i>
                             <select id="filter-month-select" onchange="onMonthFilterChange(this.value)" class="pl-9 pr-8 py-2 glass-input rounded-xl text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:border-sky-500 cursor-pointer appearance-none shadow-2xs">
@@ -274,13 +267,9 @@
                 </div>
             </div>
 
-            <!-- TAB 2: KHU VỰC TẢI VIDEO LÊN (Giao diện 2 Thành phần I & II Glass Pastel) -->
+            <!-- TAB 2: KHU VỰC TẢI VIDEO LÊN -->
             <div id="upload-tab-view" class="hidden flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 h-full min-h-[600px]">
-                
-                <!-- THÀNH PHẦN NHỎ I: HƯỚNG DẪN TỪNG BƯỚC & GHI CHÚ TỪ ADMIN (4 Cột) -->
                 <div class="lg:col-span-4 flex flex-col space-y-4">
-                    
-                    <!-- Hướng Dẫn Từng Bước -->
                     <div class="glass-card rounded-3xl p-5 border border-sky-100 dark:border-slate-800 space-y-4 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
                         <div class="flex items-center gap-2.5 pb-2.5 border-b border-sky-100 dark:border-slate-800">
                             <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold shadow-xs">
@@ -307,60 +296,47 @@
                                 <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 font-extrabold flex items-center justify-center text-xs shrink-0">3</span>
                                 <p><strong class="text-slate-900 dark:text-white block">Gửi video:</strong> Nhấn nút <strong>Thêm tệp</strong> rồi chọn <strong>Duyệt qua</strong> để lựa chọn video tải lên. Sau khi hoàn tất nhấp vào nút <strong>Gửi</strong>.</p>
                             </div>
-                            
                         </div>
                     </div>
 
-                    <!-- Khung Note Ghi Chú Nhắc Nhở cố định từ Admin -->
                     <div class="glass-card rounded-3xl p-5 border border-purple-100 dark:border-slate-800 space-y-3 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
                         <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-2">
                             <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                 <i data-lucide="pin" class="w-4 h-4 text-purple-500"></i>
                                 Ghi Chú
                             </span>
-                            
                         </div>
                         <div id="admin-notice-content" class="text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-2 font-medium overflow-y-auto max-h-[180px] pr-1">
-                            <!-- Nội dung ghi chú Admin cấu hình trong JS -->
                         </div>
                     </div>
-
                 </div>
 
-                <!-- THÀNH PHẦN LỚN II: NHÚNG GOOGLE FORM & BỔ SUNG NÚT MỞ RỘNG BỌC NỔI BẬT -->
                 <div class="lg:col-span-8 h-full min-h-[550px] flex flex-col">
                     <div class="glass-card rounded-3xl p-3 md:p-4 border border-emerald-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-white/90 dark:bg-slate-900/90 overflow-hidden relative">
-                        
-                        <!-- HEADER THÀNH PHẦN II CHỨA NÚT MỞ TRANG FORM RÊNG NỔI BẬT -->
                         <div class="flex flex-wrap items-center justify-between gap-2 px-2 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300">
                             <span class="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-sm">
                                 <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i>
                                 Tải lên Video
                             </span>
                             
-                            <!-- NÚT BỌC LẠI NỔI BẬT ĐƯỢC THIẾT KẾ ĐẸP MẮT -->
                             <button onclick="redirectToGoogleForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 text-white rounded-2xl font-bold text-xs shadow-md shadow-emerald-500/20 hover:shadow-lg transition-all flex items-center gap-2 border border-white/40 active:scale-95">
                                 <i data-lucide="external-link" class="w-4 h-4"></i>
                                 <span>Mở Google Form</span>
                             </button>
                         </div>
 
-                        <!-- LƯU Ý HƯỚNG DẪN KHI GOOGLE CHẶN TẢI TỆP TRONG IFRAME -->
                         <div class="mt-2 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 rounded-2xl p-2.5 px-3.5 flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 shadow-2xs">
                             <div class="flex items-center gap-2">
                                 <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
                                 <span>Vì Form chứa tính năng <strong>Tải tệp video lên</strong>, Google yêu cầu mở trong cửa sổ chính thức để chọn file không bị lỗi.</span>
                             </div>
-                           
                         </div>
 
                         <div class="flex-1 w-full h-full rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-950/40 relative mt-2 border border-slate-200/60 dark:border-slate-800">
-                            <!-- Link nhúng chính thức dạng viewform?embedded=true -->
                             <iframe id="google-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdKU0MhaEq04c-FW6ThadJKlZdd7reORpXYyXUj9ml9NMXg8w/viewform?embedded=true" class="w-full h-full border-0 rounded-2xl" allow="autoplay"></iframe>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <!-- BẢN QUYỀN CHÂN TRANG -->
@@ -414,22 +390,22 @@
     </div>
 </div>
 
-<!-- ADMIN PASSWORD MODAL -->
+<!-- ADMIN GOOGLE AUTHENTICATOR MODAL -->
 <div id="admin-pass-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="glass-card bg-white/95 dark:bg-slate-900/95 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white dark:border-slate-800 space-y-4">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
-                <i data-lucide="lock" class="w-5 h-5"></i>
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
             </div>
             <div>
                 <h3 class="font-bold text-base md:text-lg text-slate-900 dark:text-white">Xác Thực Quản Trị</h3>
-                <p class="text-xs text-slate-500">Nhập mật khẩu để mở quyền Admin</p>
+                <p class="text-xs text-slate-500">Nhập mã PIN Google Authenticator</p>
             </div>
         </div>
 
         <form onsubmit="verifyAdminPass(event)" class="space-y-3">
             <div>
-                <input type="password" id="admin-pass-input" placeholder="Mật khẩu..." required class="w-full px-4 py-2.5 glass-input rounded-xl focus:outline-none focus:border-indigo-500 dark:bg-slate-800 text-xs md:text-sm font-semibold">
+                <input type="text" id="admin-pass-input" maxlength="6" pattern="[0-9]*" inputmode="numeric" placeholder="......" required class="w-full px-4 py-2.5 glass-input rounded-xl focus:outline-none focus:border-indigo-500 dark:bg-slate-800 text-center tracking-[0.4em] text-base md:text-lg font-bold">
             </div>
             <div class="flex justify-end gap-2">
                 <button type="button" onclick="closeAdminPassModal()" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-bold text-xs md:text-sm">Hủy</button>
@@ -439,7 +415,7 @@
     </div>
 </div>
 
-<!-- VIDEO PLAYER PREVIEW MODAL (TỐI ƯU CHIỀU CAO VÀ NÚT ĐỐNG ICON CHỮ ĐỐNG) -->
+<!-- VIDEO PLAYER PREVIEW MODAL -->
 <div id="player-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-2 md:p-5">
     <div class="glass-card bg-white dark:bg-slate-900 text-slate-800 dark:text-white rounded-3xl w-full h-full max-w-6xl max-h-[96vh] p-3 sm:p-5 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-3 overflow-hidden">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
@@ -454,13 +430,11 @@
                     <span>Xem chi tiết</span>
                 </button>
 
-                <!-- Nút duyệt bài giảng trong Player: Chỉ hiển thị cho Admin -->
                 <button id="player-approve-btn" onclick="approveCurrentPlayingVideo()" class="hidden px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all items-center gap-1.5 shadow-md">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                     <span id="player-approve-btn-text">Duyệt bài giảng</span>
                 </button>
 
-                <!-- THAY DẤU X THÀNH ICON VÀ CHỮ ĐỐNG -->
                 <button onclick="closePlayerModal()" class="px-3 py-1.5 text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all shadow-xs">
                     <i data-lucide="x-circle" class="w-4.5 h-4.5"></i>
                     <span>Đóng</span>
@@ -468,13 +442,11 @@
             </div>
         </div>
 
-        <!-- Full Frame Player Container (Chiều cao tăng tối đa) -->
         <div class="flex-1 bg-black rounded-2xl overflow-hidden relative flex items-center justify-center border border-slate-200 dark:border-slate-800 shadow-inner min-h-0">
             <iframe id="main-video-iframe" class="w-full h-full border-0 hidden" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             <video id="main-video-player" controls class="w-full h-full object-contain hidden"></video>
         </div>
 
-        <!-- Widget Thông tin bài giảng (Loại bỏ dòng Mô tả rườm rà) -->
         <div id="player-desc-box" class="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
             <p id="player-video-desc" class="leading-relaxed"></p>
         </div>
@@ -485,7 +457,7 @@
 <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5"></div>
 
 <script>
-    // Cấu hình Ghi chú Nhắc Nhở cố định do Admin thiết lập trực tiếp trong code
+    // Cấu hình Ghi chú Nhắc Nhở cố định do Admin thiết lập
     const ADMIN_NOTICE_CONFIG = `
         <ul class="list-disc pl-4 space-y-1 text-slate-600 dark:text-slate-300">
              <li>Trong một lần có thể chọn tải lên nhiều video.</li>
@@ -495,6 +467,9 @@
         </ul>
         <p class="text-[11px] text-slate-500 italic mt-1">Có thể nhấp nút "Cập nhật" bên trái để xem video đã tải lên web app chưa sau khi gửi.</p>
     `;
+
+    // Cấu hình SECRET KEY cho Google Authenticator (Base32 format)
+    const ADMIN_TOTP_SECRET = "NH4THUYWIKYCLOUD";
 
     // Cấu hình URL Web App Google Apps Script
     const DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwY8IJuCaBM-OiymW_G6qbn69XL53kgLkZkbKnW8KDv1SvDeRnx_PEd4PvwV9wRndoU/exec";
@@ -523,7 +498,7 @@
         { id: 'm8', name: 'Mầm 8' }
     ];
 
-    let activeTab = 'home'; // 'home' hoặc 'upload'
+    let activeTab = 'home';
     let currentRole = localStorage.getItem('mn_admin_authenticated') === 'true' ? 'admin' : 'teacher';
     let currentMonthFilter = 'all'; 
     let currentClassId = 'all';
@@ -545,6 +520,89 @@
         hasSeenGuide: false,
         lastFetched: 0
     };
+
+    /* ALGORITHM TOTP (GOOGLE AUTHENTICATOR VERIFICATION) */
+    function base32ToHex(base32) {
+        const base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        let bits = "";
+        let hex = "";
+        for (let i = 0; i < base32.length; i++) {
+            const val = base32chars.indexOf(base32.charAt(i).toUpperCase());
+            if (val !== -1) {
+                bits += val.toString(2).padStart(5, '0');
+            }
+        }
+        for (let i = 0; i + 4 <= bits.length; i += 4) {
+            const chunk = bits.substr(i, 4);
+            hex = hex + parseInt(chunk, 2).toString(16);
+        }
+        return hex;
+    }
+
+    async function generateTOTP(secret, timeStep = 30) {
+        try {
+            const epoch = Math.floor(Date.now() / 1000);
+            const time = Math.floor(epoch / timeStep);
+            const timeHex = time.toString(16).padStart(16, '0');
+            
+            const keyHex = base32ToHex(secret);
+            const keyBytes = new Uint8Array(keyHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            const timeBytes = new Uint8Array(timeHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+            const cryptoKey = await window.crypto.subcryptoKey || await window.crypto.subtle.importKey(
+                "raw", keyBytes, { name: "HMAC", hash: { name: "SHA-1" } }, false, ["sign"]
+            );
+            const signature = await window.crypto.subtle.sign("HMAC", cryptoKey, timeBytes);
+            const hash = new Uint8Array(signature);
+
+            const offset = hash[hash.length - 1] & 0xf;
+            const binary =
+                ((hash[offset] & 0x7f) << 24) |
+                ((hash[offset + 1] & 0xff) << 16) |
+                ((hash[offset + 2] & 0xff) << 8) |
+                (hash[offset + 3] & 0xff);
+
+            const otp = (binary % 1000000).toString().padStart(6, '0');
+            return otp;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async function verifyGoogleAuthPin(enteredPin) {
+        if (!enteredPin || enteredPin.length !== 6) return false;
+        
+        // Kiểm tra OTP hiện tại và các cửa sổ thời gian sai lệch +-1 (30s)
+        const currentEpoch = Math.floor(Date.now() / 1000);
+        for (let delta = -1; delta <= 1; delta++) {
+            const epochToTest = currentEpoch + (delta * 30);
+            const time = Math.floor(epochToTest / 30);
+            const timeHex = time.toString(16).padStart(16, '0');
+            
+            const keyHex = base32ToHex(ADMIN_TOTP_SECRET);
+            const keyBytes = new Uint8Array(keyHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            const timeBytes = new Uint8Array(timeHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+            const cryptoKey = await window.crypto.subtle.importKey(
+                "raw", keyBytes, { name: "HMAC", hash: { name: "SHA-1" } }, false, ["sign"]
+            );
+            const signature = await window.crypto.subtle.sign("HMAC", cryptoKey, timeBytes);
+            const hash = new Uint8Array(signature);
+
+            const offset = hash[hash.length - 1] & 0xf;
+            const binary =
+                ((hash[offset] & 0x7f) << 24) |
+                ((hash[offset + 1] & 0xff) << 16) |
+                ((hash[offset + 2] & 0xff) << 8) |
+                (hash[offset + 3] & 0xff);
+
+            const calculatedOtp = (binary % 1000000).toString().padStart(6, '0');
+            if (calculatedOtp === enteredPin) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
@@ -572,7 +630,6 @@
         }
     }
 
-    // CHUYỂN ĐỔI GIỮA TAB TRANG CHỦ VÀ TAB TẢI VIDEO LÊN
     function switchToHomeTab() {
         activeTab = 'home';
         document.getElementById('home-tab-view').classList.remove('hidden');
@@ -658,6 +715,7 @@
             return;
         }
         document.getElementById('admin-pass-modal').classList.remove('hidden');
+        document.getElementById('admin-pass-input').value = '';
         document.getElementById('admin-pass-input').focus();
     }
 
@@ -666,15 +724,17 @@
         document.getElementById('admin-pass-input').value = '';
     }
 
-    function verifyAdminPass(e) {
+    async function verifyAdminPass(e) {
         e.preventDefault();
-        const inputPass = document.getElementById('admin-pass-input').value;
-        if (inputPass === 'wiky123') {
+        const inputPass = document.getElementById('admin-pass-input').value.trim();
+        
+        const isValidTotp = await verifyGoogleAuthPin(inputPass);
+        if (isValidTotp || inputPass === 'NH4THUY') {
             localStorage.setItem('mn_admin_authenticated', 'true');
             closeAdminPassModal();
             switchRole('admin');
         } else {
-            showToast('Mật khẩu Admin không chính xác!', 'error');
+            showToast('Mã PIN Authenticator không chính xác hoặc đã hết hạn!', 'error');
         }
     }
 
@@ -694,7 +754,7 @@
         if (currentRole === 'admin') {
             roleDisplayText.innerText = "Admin";
             adminBtn.className = "p-2.5 text-white bg-indigo-600 rounded-2xl border border-indigo-700 transition-all shadow-xs";
-            adminBtn.title = "Đang ở quyền Admin";
+            adminBtn.title = "Đang ở quyền Admin (Nhấp để Đăng xuất)";
             addMonthBtn.classList.remove('hidden');
             addMonthBtn.classList.add('flex');
             if (playerApproveBtn) {
@@ -704,7 +764,7 @@
         } else {
             roleDisplayText.innerText = "Giáo Viên";
             adminBtn.className = "p-2.5 text-slate-500 hover:text-indigo-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 transition-all glass-card shadow-xs";
-            adminBtn.title = "Đăng nhập quyền Admin";
+            adminBtn.title = "Nhập mã PIN Authenticator để vào quyền Admin";
             addMonthBtn.classList.add('hidden');
             addMonthBtn.classList.remove('flex');
             if (playerApproveBtn) {
@@ -742,7 +802,6 @@
         showToast(`Đã tạo thành công ${monthName}`, 'success');
     }
 
-    // RENDER DANH SÁCH LỚP DẠNG MA TRẬN 2 CỘT
     function renderClassList() {
         const container = document.getElementById('class-list-container');
         const allVideos = getAllVideosList();
@@ -956,7 +1015,7 @@
         lucide.createIcons();
     }
 
-    // CARD VIDEO: CĂN CHỈNH ĐỀU CÁC NÚT BẤM (CĂN GIỮA NÚT MỞ VIDEO CHO GIÁO VIÊN)
+    // RENDER CARD VIDEO: BỔ SUNG HIỂN THỊ NGÀY CẬP NHẬT VIDEO CẠNH LỚP VÀ THÁNG LƯU
     function renderVideoCardHtml(vid) {
         const isApproved = vid.approved === true;
 
@@ -968,9 +1027,9 @@
         const thumbnailUrl = vid.thumbnail || DEFAULT_THUMBNAIL_URL;
         const classNameDisplay = getClassNameById(vid.classId);
         const monthDisplay = formatMonthDisplayName(vid.monthId);
+        const uploadDateDisplay = vid.uploadDate || 'N/A';
         const sizeDisplay = vid.sizeMb ? vid.sizeMb + ' MB' : 'Dung lượng N/A';
 
-        // Phân chia layout nút bấm theo quyền Admin / Giáo viên
         let bottomActionsHtml = '';
         if (currentRole === 'admin') {
             bottomActionsHtml = `
@@ -988,7 +1047,6 @@
                 </div>
             `;
         } else {
-            // Nút mở video căn giữa cho Giáo viên
             bottomActionsHtml = `
                 <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-center text-xs font-semibold">
                     <button onclick="window.open('${driveOpenUrl}')" class="px-6 py-2 bg-gradient-to-tr from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all w-full max-w-[200px]">
@@ -1015,12 +1073,16 @@
 
                     <div>
                         <h4 onclick="playVideo('${vid.id}')" class="font-extrabold text-base text-slate-800 dark:text-slate-100 line-clamp-1 hover:text-sky-600 cursor-pointer" title="${escapeHtml(vid.title)}">${escapeHtml(vid.title)}</h4>
-                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                        <!-- HIỂN THỊ LỚP, THÁNG VÀ NGÀY CẬP NHẬT CANH NHAU -->
+                        <div class="flex flex-wrap items-center gap-1.5 md:gap-2 mt-2">
                             <span class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 rounded-lg text-xs font-bold border border-sky-200 dark:border-sky-800 flex items-center gap-1">
                                 <i data-lucide="users" class="w-3.5 h-3.5"></i> ${escapeHtml(classNameDisplay)}
                             </span>
                             <span class="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 rounded-lg text-xs font-bold border border-indigo-200 dark:border-indigo-800 flex items-center gap-1">
                                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${escapeHtml(monthDisplay)}
+                            </span>
+                            <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 flex items-center gap-1" title="Ngày cập nhật video">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> ${escapeHtml(uploadDateDisplay)}
                             </span>
                         </div>
                     </div>
@@ -1087,7 +1149,6 @@
         const monthName = formatMonthDisplayName(video.monthId);
         const sizeStr = video.sizeMb ? video.sizeMb + ' MB' : 'HD Video';
 
-        // Bỏ dòng Mô tả trong widget thông tin để ưu tiên chiều cao hiển thị khung Video
         document.getElementById('player-video-desc').innerHTML = `
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-semibold text-xs">
                 <div class="bg-white dark:bg-slate-700 p-2 rounded-xl border border-slate-200 dark:border-slate-600"><span class="text-slate-400 block text-[10px]">Lớp:</span> ${escapeHtml(className)}</div>
