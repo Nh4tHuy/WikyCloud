@@ -405,7 +405,7 @@
                     <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-1.5">
                         <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                             <i data-lucide="pin" class="w-3.5 h-3.5 text-purple-500"></i>
-                            Ghi Chú Admin
+                            Ghi Chú
                         </span>
                     </div>
                     <div class="admin-notice-content text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-1.5 font-medium overflow-y-auto flex-1 pr-1">
@@ -417,7 +417,7 @@
             <div class="lg:col-span-8 flex flex-col h-full min-h-[300px]">
                 <div class="glass-card rounded-2xl p-2.5 md:p-3 border border-sky-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-black overflow-hidden relative border border-slate-800">
                     <div class="w-full h-full flex items-center justify-center relative">
-                        <video id="guide-tutorial-video" controls autoplay muted playsinline loop class="w-full h-full object-contain rounded-xl">
+                        <video id="guide-tutorial-video" controls autoplay playsinline loop preload="auto" class="w-full h-full object-contain rounded-xl">
                             <source src="./video.mp4" type="video/mp4">
                             Trình duyệt của bạn không hỗ trợ thẻ video.
                         </video>
@@ -508,7 +508,7 @@
     const ADMIN_NOTICE_CONFIG = `
         <ul class="list-disc pl-4 space-y-1 text-slate-600 dark:text-slate-300">
             <li>Trong một lần có thể chọn tải lên nhiều video.</li>
-            <li>Có thể đặt tên tệp: <code>[Tên Bài Giảng] - [Tên Lớp]</code>.</li>
+            <li>Có thể đặt tên tệp: <code>[Tên Bài Giảng].mp4</code></li>
             <li>Sau khi gửi Form, video sẽ ở trạng thái <em>Chờ duyệt</em> cho tới khi được xác nhận.</li>
         </ul>
         <p class="text-[11px] text-slate-500 italic mt-1">Nhấp nút "Cập nhật" bên trái để xem video sau khi gửi.</p>
@@ -549,6 +549,7 @@
     let currentMonthFilter = 'all'; 
     let currentClassId = 'all';
     let currentPlayingVideoId = null;
+    let guideFadeInterval = null;
 
     let appData = JSON.parse(localStorage.getItem('mn_video_app_data')) || {
         months: [
@@ -566,6 +567,28 @@
         hasSeenGuide: false,
         lastFetched: 0
     };
+
+    /**
+     * Hàm làm sạch tiêu đề video:
+     * Loạii bỏ phần tên Gmail/người gửi sau dấu "-" hoặc "–"
+     * Loại bỏ các phần mở rộng đuôi tệp video (.mp4, .mov,...)
+     */
+    function cleanVideoTitle(rawTitle) {
+        if (!rawTitle) return '';
+        let cleaned = String(rawTitle).trim();
+
+        // 1. Loại bỏ các đuôi mở rộng tệp video phổ biến ở cuối chuỗi
+        cleaned = cleaned.replace(/\.(mp4|mov|avi|mkv|flv|wmv|webm)$/i, '');
+
+        // 2. Tách theo các loại dấu gạch ngang (bao gồm cả khoảng trắng xung quanh hoặc không)
+        // Tìm vị trí dấu '-' hoặc '–' hoặc '—'
+        const splitIndex = cleaned.search(/\s*[-–—]\s*/);
+        if (splitIndex !== -1) {
+            cleaned = cleaned.substring(0, splitIndex).trim();
+        }
+
+        return cleaned || rawTitle;
+    }
 
     /* ALGORITHM TOTP (GOOGLE AUTHENTICATOR VERIFICATION) */
     function base32ToHex(base32) {
@@ -741,12 +764,36 @@
         const guideVideo = document.getElementById('guide-tutorial-video');
         guideModal.classList.remove('hidden');
         
-        // Tự động phát video hướng dẫn khi mở popup
+        // Tự động phát video hướng dẫn có tiếng (tăng dần âm lượng từ 0.15 đến 1.0 trong 5 giây)
         if (guideVideo) {
+            if (guideFadeInterval) clearInterval(guideFadeInterval);
+            
             guideVideo.currentTime = 0;
-            guideVideo.play().catch(err => {
-                console.log("Autoplay was prevented by browser:", err);
-            });
+            guideVideo.muted = false;
+            guideVideo.volume = 0.15; // Bắt đầu ở âm lượng nhỏ để tránh trình duyệt block
+
+            const playPromise = guideVideo.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    const durationMs = 5000;
+                    const stepMs = 100;
+                    const steps = durationMs / stepMs;
+                    const volumeIncrement = (1.0 - 0.15) / steps;
+
+                    guideFadeInterval = setInterval(() => {
+                        if (guideVideo.volume + volumeIncrement < 1.0) {
+                            guideVideo.volume += volumeIncrement;
+                        } else {
+                            guideVideo.volume = 1.0;
+                            clearInterval(guideFadeInterval);
+                        }
+                    }, stepMs);
+                }).catch(err => {
+                    console.warn("Autoplay with audio was prevented, trying muted:", err);
+                    guideVideo.muted = true;
+                    guideVideo.play().catch(() => {});
+                });
+            }
         }
     }
 
@@ -754,6 +801,8 @@
         const guideModal = document.getElementById('guide-modal');
         const guideVideo = document.getElementById('guide-tutorial-video');
         
+        if (guideFadeInterval) clearInterval(guideFadeInterval);
+
         if (guideVideo) {
             guideVideo.pause();
         }
@@ -1078,7 +1127,7 @@
         lucide.createIcons();
     }
 
-    // RENDER CARD VIDEO: BỔ SUNG HIỂN THỊ NGÀY CẬP NHẬT VIDEO CẠNH LỚP VÀ THÁNG LƯU
+    // RENDER CARD VIDEO: TỰ ĐỘNG LỌC TÊN NGƯỜI GỬI VÀ ĐUÔI PHÍA SAU TIÊU ĐỀ
     function renderVideoCardHtml(vid) {
         const isApproved = vid.approved === true;
 
@@ -1092,6 +1141,9 @@
         const monthDisplay = formatMonthDisplayName(vid.monthId);
         const uploadDateDisplay = vid.uploadDate || 'N/A';
         const sizeDisplay = vid.sizeMb ? vid.sizeMb + ' MB' : 'Dung lượng N/A';
+        
+        // Tiêu đề đã qua hàm làm sạch tiêu đề
+        const cleanTitle = cleanVideoTitle(vid.title);
 
         let bottomActionsHtml = '';
         if (currentRole === 'admin') {
@@ -1123,7 +1175,7 @@
             <div class="glass-card rounded-3xl p-4 md:p-5 shadow-glass-card border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between space-y-3.5 group">
                 <div class="space-y-3">
                     <div onclick="playVideo('${vid.id}')" class="aspect-video bg-slate-900 rounded-2xl relative overflow-hidden flex items-center justify-center group-hover:scale-[1.01] transition-transform cursor-pointer shadow-md">
-                        <img src="${thumbnailUrl}" alt="${escapeHtml(vid.title)}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-90 group-hover:scale-105 transition-all duration-300">
+                        <img src="${thumbnailUrl}" alt="${escapeHtml(cleanTitle)}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-90 group-hover:scale-105 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                         
                         <div class="w-13 h-13 rounded-full bg-white/30 backdrop-blur-md text-white flex items-center justify-center ring-4 ring-white/40 group-hover:scale-110 transition-transform z-10 shadow-lg">
@@ -1135,7 +1187,7 @@
                     </div>
 
                     <div>
-                        <h4 onclick="playVideo('${vid.id}')" class="font-extrabold text-base text-slate-800 dark:text-slate-100 line-clamp-1 hover:text-sky-600 cursor-pointer" title="${escapeHtml(vid.title)}">${escapeHtml(vid.title)}</h4>
+                        <h4 onclick="playVideo('${vid.id}')" class="font-extrabold text-base text-slate-800 dark:text-slate-100 line-clamp-1 hover:text-sky-600 cursor-pointer" title="${escapeHtml(cleanTitle)}">${escapeHtml(cleanTitle)}</h4>
                         <!-- HIỂN THỊ LỚP, THÁNG VÀ NGÀY CẬP NHẬT CANH NHAU -->
                         <div class="flex flex-wrap items-center gap-1.5 md:gap-2 mt-2">
                             <span class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 rounded-lg text-xs font-bold border border-sky-200 dark:border-sky-800 flex items-center gap-1">
@@ -1191,7 +1243,10 @@
         if (currentMonthFilter !== 'all') {
             display = display.filter(v => normalizeMonthId(v.monthId) === currentMonthFilter);
         }
-        const filtered = display.filter(v => v.title.toLowerCase().includes(query) || (v.desc && v.desc.toLowerCase().includes(query)));
+        const filtered = display.filter(v => {
+            const cTitle = cleanVideoTitle(v.title).toLowerCase();
+            return cTitle.includes(query) || (v.desc && v.desc.toLowerCase().includes(query));
+        });
         renderVideoWorkspaceByMonths(filtered);
     }
 
@@ -1205,8 +1260,9 @@
         if (!video) return;
 
         currentPlayingVideoId = videoId;
+        const displayTitle = cleanVideoTitle(video.title);
 
-        document.getElementById('player-video-title').innerText = video.title;
+        document.getElementById('player-video-title').innerText = displayTitle;
         
         const className = getClassNameById(video.classId);
         const monthName = formatMonthDisplayName(video.monthId);
