@@ -1016,7 +1016,7 @@
     }
 
     async function fetchAllDataFromCloud(isInitial = false) {
-        showGlobalLoadingBar(true, "Đang tải dữ liệu từ Cloud...");
+        showGlobalLoadingBar(true, "Đang tải dữ liệu...");
         try {
             const fetchUrl = `${DEFAULT_APPS_SCRIPT_URL}?action=getAllVideos`;
             const res = await fetch(fetchUrl);
