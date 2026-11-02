@@ -52,6 +52,7 @@
             background: linear-gradient(135deg, #eef2ff 0%, #e0f2fe 40%, #f3e8ff 100%);
             background-attachment: fixed;
             font-size: 15px;
+            touch-action: manipulation;
         }
         .dark body {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #090d16 100%);
@@ -101,7 +102,7 @@
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
     </style>
 </head>
-<body class="h-full flex flex-col antialiased selection:bg-sky-200 selection:text-sky-900">
+<body class="min-h-screen h-[100dvh] flex flex-col antialiased selection:bg-sky-200 selection:text-sky-900">
 
 <!-- FULLSCREEN OVERLAY LOADING BAR -->
 <div id="full-page-loading" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex flex-col items-center justify-center transition-all duration-300 opacity-0 pointer-events-none">
@@ -117,50 +118,70 @@
     </div>
 </div>
 
+<!-- OVERLAY BACKDROP FOR MOBILE SIDEBAR -->
+<div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
+
 <!-- HEADER / NAVIGATION -->
-<header class="sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between glass-panel border-b border-white/60 dark:border-slate-800/80 shadow-glass-sm">
-    <div class="flex items-center space-x-3.5 cursor-pointer" onclick="switchToHomeTab()">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-400 via-sky-500 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
-            <i data-lucide="video" class="w-6 h-6"></i>
-        </div>
-        <div>
-            <h1 class="font-extrabold text-slate-900 dark:text-white text-lg md:text-xl tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600 dark:from-sky-400 dark:to-indigo-400">WIKY CLOUD</h1>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-1">Kho Video Bài Giảng Mầm Non</p>
+<header class="sticky top-0 z-40 px-3.5 sm:px-6 py-3 flex items-center justify-between glass-panel border-b border-white/60 dark:border-slate-800/80 shadow-glass-sm shrink-0">
+    <div class="flex items-center space-x-2.5 sm:space-x-3.5">
+        <!-- Button toggle Sidebar trên Mobile -->
+        <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Mở danh sách lớp">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <div class="flex items-center space-x-2.5 sm:space-x-3.5 cursor-pointer" onclick="switchToHomeTab()">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-sky-400 via-sky-500 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+                <i data-lucide="video" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg md:text-xl tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600 dark:from-sky-400 dark:to-indigo-400">WIKY CLOUD</h1>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-0.5 sm:mt-1 truncate max-w-[140px] sm:max-w-none">Kho Video Bài Giảng Mầm Non</p>
+            </div>
         </div>
     </div>
 
     <!-- Role Selector & Actions -->
-    <div class="flex items-center gap-2.5 md:gap-3">
-        <button onclick="openGuideModal()" class="p-2.5 text-sky-700 dark:text-sky-300 hover:bg-sky-100/60 dark:hover:bg-slate-800 rounded-2xl border border-sky-200/60 dark:border-slate-700 transition-all flex items-center gap-1.5 font-bold text-xs glass-card shadow-xs" title="Hướng Dẫn Sử Dụng">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 md:gap-3">
+        <button onclick="openGuideModal()" class="p-2 sm:p-2.5 text-sky-700 dark:text-sky-300 hover:bg-sky-100/60 dark:hover:bg-slate-800 rounded-2xl border border-sky-200/60 dark:border-slate-700 transition-all flex items-center gap-1.5 font-bold text-xs glass-card shadow-xs" title="Hướng Dẫn Sử Dụng">
             <i data-lucide="help-circle" class="w-4 h-4 text-sky-500"></i>
             <span class="hidden sm:inline">Hướng Dẫn</span>
         </button>
 
-        <div class="flex items-center bg-sky-50/80 dark:bg-slate-800/80 p-1 rounded-2xl border border-sky-100 dark:border-slate-700/80">
-            <div class="px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-400 shadow-xs">
-                <i data-lucide="user" class="w-4 h-4"></i>
-                <span id="role-display-text">Giáo Viên</span>
+        <div class="flex items-center bg-sky-50/80 dark:bg-slate-800/80 p-0.5 sm:p-1 rounded-2xl border border-sky-100 dark:border-slate-700/80">
+            <div class="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-400 shadow-xs">
+                <i data-lucide="user" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span id="role-display-text" class="text-[11px] sm:text-xs">Giáo Viên</span>
             </div>
         </div>
 
-        <button id="admin-access-btn" onclick="requestAdminRole()" class="p-2.5 text-slate-500 hover:text-indigo-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 transition-all glass-card shadow-xs" title="Quyền Quản Trị Viên (Admin)">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
+        <button id="admin-access-btn" onclick="requestAdminRole()" class="p-2 sm:p-2.5 text-slate-500 hover:text-indigo-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 transition-all glass-card shadow-xs" title="Quyền Quản Trị Viên (Admin)">
+            <i data-lucide="shield-check" class="w-4.5 h-4.5 sm:w-5 sm:h-5"></i>
         </button>
 
-        <button onclick="toggleDarkMode()" class="p-2.5 text-slate-500 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 transition-all glass-card shadow-xs">
-            <i data-lucide="moon" id="dark-icon" class="w-5 h-5"></i>
+        <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 text-slate-500 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 transition-all glass-card shadow-xs">
+            <i data-lucide="moon" id="dark-icon" class="w-4.5 h-4.5 sm:w-5 sm:h-5"></i>
         </button>
     </div>
 </header>
 
-<div class="flex-1 flex overflow-hidden relative">
+<div class="flex-1 flex overflow-hidden relative min-h-0">
 
-    <!-- SIDEBAR (DANH SÁCH LỚP HỌC & WIDGET) -->
-    <aside class="w-80 md:w-88 glass-panel border-r border-white/60 dark:border-slate-800 flex flex-col shrink-0">
-        <div class="flex-1 overflow-y-auto p-4 md:p-5 space-y-4">
+    <!-- SIDEBAR (DANH SÁCH LỚP HỌC & WIDGET - HỖ TRỢ TRẬT TRỆU MOBILE SIDEBAR SLIDE IN) -->
+    <aside id="main-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72 sm:w-80 md:w-88 glass-panel border-r border-white/60 dark:border-slate-800 flex flex-col shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none">
+        <div class="flex items-center justify-between p-4 lg:hidden border-b border-slate-200/60 dark:border-slate-800">
+            <span class="font-extrabold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-sky-500"></i>
+                Danh Mục Lớp Học
+            </span>
+            <button onclick="toggleMobileSidebar(false)" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-3.5 sm:p-4 md:p-5 space-y-4">
             
             <!-- WIDGET TIỆN ÍCH ĐIỀU HƯỚNG NHANH -->
-            <div class="bg-gradient-to-br from-sky-50/90 via-purple-50/80 to-pink-50/90 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-3 rounded-2xl border border-sky-100/80 dark:border-slate-700 shadow-glass-sm space-y-2">
+            <div class="bg-gradient-to-br from-sky-50/90 via-purple-50/80 to-pink-50/90 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-2.5 sm:p-3 rounded-2xl border border-sky-100/80 dark:border-slate-700 shadow-glass-sm space-y-2">
                 <div class="grid grid-cols-3 gap-1.5">
                     <button onclick="switchToHomeTab()" id="widget-home-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-sky-100 hover:bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 shadow-xs hover:scale-[1.02]">
                         <i data-lucide="home" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
@@ -210,137 +231,139 @@
     <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-white/20 dark:bg-slate-950/20">
 
         <!-- HEADER WORKSPACE BAR -->
-        <div class="p-4 md:p-5 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md">
-            <div class="space-y-1">
+        <div class="p-3.5 sm:p-4 md:p-5 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shrink-0">
+            <div class="space-y-0.5 sm:space-y-1">
                 <div class="flex items-center gap-2.5">
-                    <h2 id="current-class-title" class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Trang chủ</h2>
+                    <h2 id="current-class-title" class="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Trang chủ</h2>
                 </div>
-                <p id="current-month-subtitle" class="text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400">Toàn bộ các video bài giảng trên hệ thống</p>
+                <p id="current-month-subtitle" class="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400">Toàn bộ các video bài giảng trên hệ thống</p>
             </div>
         </div>
 
         <!-- MAIN VIEWPORT CONTAINER -->
-        <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 flex flex-col justify-between">
+        <div class="flex-1 overflow-y-auto p-3.5 sm:p-4 md:p-6 flex flex-col justify-between">
 
-            <!-- TAB 1: KHU VỰC TRANG CHỦ & DANH SÁCH VIDEO -->
-            <div id="home-tab-view" class="space-y-6">
-                <!-- SEARCH & FILTER MONTH BAR -->
-                <div class="flex flex-wrap items-center justify-between gap-3 bg-white/60 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-glass-sm backdrop-blur-md">
-                    <div class="flex items-center gap-3 flex-1 min-w-[280px]">
-                        <div class="relative flex-1">
-                            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" id="search-video-input" onkeyup="filterVideos()" placeholder="Tìm tên video bài giảng..." class="w-full pl-10 pr-4 py-2 glass-input rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:border-sky-500 shadow-2xs">
-                        </div>
-
-                        <div class="relative shrink-0">
-                            <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-sky-500 z-10 pointer-events-none"></i>
-                            <select id="filter-month-select" onchange="onMonthFilterChange(this.value)" class="pl-9 pr-8 py-2 glass-input rounded-xl text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:border-sky-500 cursor-pointer appearance-none shadow-2xs">
-                                <option value="all">Tất cả các tháng</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
-                        </div>
-
-                        <button id="admin-add-month-btn" onclick="addNewMonth()" class="hidden text-xs font-bold px-3 py-2 bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 rounded-xl hover:bg-sky-100 transition-all items-center gap-1 shrink-0" title="Thêm tháng học mới (Admin)">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                            <span>Thêm Tháng</span>
-                        </button>
-                    </div>
-
-                    <div class="flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-500 shrink-0 border-l border-slate-200 dark:border-slate-800 pl-3">
-                        <span>Tổng số: <strong id="video-count-display" class="text-sky-600 dark:text-sky-400 font-bold">0</strong> video</span>
-                    </div>
-                </div>
-
-                <div id="video-grid-container" class="space-y-8">
-                    <!-- Dynamic Month Sections Container -->
-                </div>
-
-                <div id="empty-state" class="hidden py-16 flex flex-col items-center justify-center text-center space-y-3.5">
-                    <div class="w-18 h-18 rounded-3xl bg-sky-100 dark:bg-sky-950 text-sky-600 flex items-center justify-center p-4 shadow-inner">
-                        <i data-lucide="film" class="w-10 h-10"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-700 dark:text-slate-200 text-lg">Chưa Có Video Bài Giảng Nào</h3>
-                    <p class="text-xs md:text-sm text-slate-500 max-w-md leading-relaxed">Giáo viên vui lòng gửi video bằng cách nhấn vào nút "Tải Video" tại Widget điều hướng bên trái.</p>
-                    <button onclick="switchToUploadTab()" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-xs md:text-sm rounded-2xl shadow-md hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                        <i data-lucide="upload-cloud" class="w-4 h-4"></i> Tải Video Lên
-                    </button>
-                </div>
-            </div>
-
-            <!-- TAB 2: KHU VỰC TẢI VIDEO LÊN -->
-            <div id="upload-tab-view" class="hidden flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 h-full min-h-[600px]">
-                <div class="lg:col-span-4 flex flex-col space-y-4">
-                    <div class="glass-card rounded-3xl p-5 border border-sky-100 dark:border-slate-800 space-y-4 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
-                        <div class="flex items-center gap-2.5 pb-2.5 border-b border-sky-100 dark:border-slate-800">
-                            <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold shadow-xs">
-                                <i data-lucide="file-text" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Hướng dẫn</h3>
-                                <p class="text-[11px] text-slate-500">Các bước tải bài giảng lên hệ thống</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3 text-xs text-slate-700 dark:text-slate-300">
-                            <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                <span class="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 font-extrabold flex items-center justify-center text-xs shrink-0">1</span>
-                                <p><strong class="text-slate-900 dark:text-white block">Mở Google Form: </strong> Nhấp vào nút <strong>"Mở Google Form"</strong> hoặc <strong>"Điền biểu mẫu"</strong> màu xanh để truy cập link tải lên video.</p>
+            <div class="space-y-5 sm:space-y-6 flex-1">
+                <!-- TAB 1: KHU VỰC TRANG CHỦ & DANH SÁCH VIDEO -->
+                <div id="home-tab-view" class="space-y-5 sm:space-y-6">
+                    <!-- SEARCH & FILTER MONTH BAR -->
+                    <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 bg-white/60 dark:bg-slate-900/60 p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-glass-sm backdrop-blur-md">
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                            <div class="relative flex-1 min-w-[180px]">
+                                <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="search-video-input" onkeyup="filterVideos()" placeholder="Tìm tên video bài giảng..." class="w-full pl-10 pr-3.5 py-2 glass-input rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:border-sky-500 shadow-2xs">
                             </div>
 
-                            <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs shrink-0">2</span>
-                                <p><strong class="text-slate-900 dark:text-white block">Nhập thông tin: </strong> Chọn chính xác <strong>Lớp giảng dạy</strong> và <strong>Tháng lưu trữ</strong> rồi nhấp vào nút <strong>Tiếp</strong>.</p>
+                            <div class="relative shrink-0">
+                                <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-sky-500 z-10 pointer-events-none"></i>
+                                <select id="filter-month-select" onchange="onMonthFilterChange(this.value)" class="pl-9 pr-8 py-2 glass-input rounded-xl text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:border-sky-500 cursor-pointer appearance-none shadow-2xs">
+                                    <option value="all">Tất cả các tháng</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="w-4 h-4 absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
                             </div>
 
-                            <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 font-extrabold flex items-center justify-center text-xs shrink-0">3</span>
-                                <p><strong class="text-slate-900 dark:text-white block">Gửi video:</strong> Nhấn nút <strong>Thêm tệp</strong> rồi chọn <strong>Duyệt qua</strong> để lựa chọn video tải lên. Sau khi hoàn tất nhấp vào nút <strong>Gửi</strong>.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-3xl p-5 border border-purple-100 dark:border-slate-800 space-y-3 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
-                        <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-2">
-                            <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                <i data-lucide="pin" class="w-4 h-4 text-purple-500"></i>
-                                Ghi Chú
-                            </span>
-                        </div>
-                        <div class="admin-notice-content text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-2 font-medium overflow-y-auto max-h-[180px] pr-1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8 h-full min-h-[550px] flex flex-col">
-                    <div class="glass-card rounded-3xl p-3 md:p-4 border border-emerald-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-white/90 dark:bg-slate-900/90 overflow-hidden relative">
-                        <div class="flex flex-wrap items-center justify-between gap-2 px-2 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300">
-                            <span class="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-sm">
-                                <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i>
-                                Tải lên Video
-                            </span>
-                            
-                            <button onclick="redirectToGoogleForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 text-white rounded-2xl font-bold text-xs shadow-md shadow-emerald-500/20 hover:shadow-lg transition-all flex items-center gap-2 border border-white/40 active:scale-95">
-                                <i data-lucide="external-link" class="w-4 h-4"></i>
-                                <span>Mở Google Form</span>
+                            <button id="admin-add-month-btn" onclick="addNewMonth()" class="hidden text-xs font-bold px-3 py-2 bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 rounded-xl hover:bg-sky-100 transition-all items-center gap-1 shrink-0" title="Thêm tháng học mới (Admin)">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span class="hidden sm:inline">Thêm Tháng</span>
                             </button>
                         </div>
 
-                        <div class="mt-2 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 rounded-2xl p-2.5 px-3.5 flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 shadow-2xs">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
-                                <span>Vì Form chứa tính năng <strong>Tải tệp video lên</strong>, Google yêu cầu mở trong cửa sổ chính thức để chọn file không bị lỗi.</span>
+                        <div class="flex items-center justify-between sm:justify-end gap-2 text-xs md:text-sm font-semibold text-slate-500 shrink-0 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-800 pt-2 sm:pt-0 sm:pl-3">
+                            <span>Tổng số: <strong id="video-count-display" class="text-sky-600 dark:text-sky-400 font-bold">0</strong> video</span>
+                        </div>
+                    </div>
+
+                    <div id="video-grid-container" class="space-y-8">
+                        <!-- Dynamic Month Sections Container -->
+                    </div>
+
+                    <div id="empty-state" class="hidden py-16 flex flex-col items-center justify-center text-center space-y-3.5">
+                        <div class="w-18 h-18 rounded-3xl bg-sky-100 dark:bg-sky-950 text-sky-600 flex items-center justify-center p-4 shadow-inner">
+                            <i data-lucide="film" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 text-lg">Chưa Có Video Bài Giảng Nào</h3>
+                        <p class="text-xs md:text-sm text-slate-500 max-w-md leading-relaxed">Giáo viên vui lòng gửi video bằng cách nhấn vào nút "Tải Video" tại Widget điều hướng bên trái.</p>
+                        <button onclick="switchToUploadTab()" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-xs md:text-sm rounded-2xl shadow-md hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                            <i data-lucide="upload-cloud" class="w-4 h-4"></i> Tải Video Lên
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 2: KHU VỰC TẢI VIDEO LÊN (TỐI ƯU CẢ TRÊN MOBILE VÀ LAPTOP) -->
+                <div id="upload-tab-view" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 min-h-[500px]">
+                    <div class="lg:col-span-4 flex flex-col space-y-4">
+                        <div class="glass-card rounded-3xl p-4 sm:p-5 border border-sky-100 dark:border-slate-800 space-y-4 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
+                            <div class="flex items-center gap-2.5 pb-2.5 border-b border-sky-100 dark:border-slate-800">
+                                <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold shadow-xs">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Hướng dẫn</h3>
+                                    <p class="text-[11px] text-slate-500">Các bước tải bài giảng lên hệ thống</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs text-slate-700 dark:text-slate-300">
+                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
+                                    <span class="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 font-extrabold flex items-center justify-center text-xs shrink-0">1</span>
+                                    <p><strong class="text-slate-900 dark:text-white block">Mở Google Form: </strong> Nhấp vào nút <strong>"Mở Google Form"</strong> hoặc <strong>"Điền biểu mẫu"</strong> màu xanh để truy cập link tải lên video.</p>
+                                </div>
+
+                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
+                                    <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs shrink-0">2</span>
+                                    <p><strong class="text-slate-900 dark:text-white block">Nhập thông tin: </strong> Chọn chính xác <strong>Lớp giảng dạy</strong> và <strong>Tháng lưu trữ</strong> rồi nhấp vào nút <strong>Tiếp</strong>.</p>
+                                </div>
+
+                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
+                                    <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 font-extrabold flex items-center justify-center text-xs shrink-0">3</span>
+                                    <p><strong class="text-slate-900 dark:text-white block">Gửi video:</strong> Nhấn nút <strong>Thêm tệp</strong> rồi chọn <strong>Duyệt qua</strong> để lựa chọn video tải lên. Sau khi hoàn tất nhấp vào nút <strong>Gửi</strong>.</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex-1 w-full h-full rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-950/40 relative mt-2 border border-slate-200/60 dark:border-slate-800">
-                            <iframe id="google-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdKU0MhaEq04c-FW6ThadJKlZdd7reORpXYyXUj9ml9NMXg8w/viewform?embedded=true" class="w-full h-full border-0 rounded-2xl" allow="autoplay"></iframe>
+                        <div class="glass-card rounded-3xl p-4 sm:p-5 border border-purple-100 dark:border-slate-800 space-y-3 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
+                            <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-2">
+                                <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                                    <i data-lucide="pin" class="w-4 h-4 text-purple-500"></i>
+                                    Ghi Chú
+                                </span>
+                            </div>
+                            <div class="admin-notice-content text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-2 font-medium overflow-y-auto max-h-[180px] pr-1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 flex flex-col min-h-[480px] sm:min-h-[580px]">
+                        <div class="glass-card rounded-3xl p-3 md:p-4 border border-emerald-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-white/90 dark:bg-slate-900/90 overflow-hidden relative">
+                            <div class="flex flex-wrap items-center justify-between gap-2 px-2 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300">
+                                <span class="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-sm">
+                                    <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i>
+                                    Tải lên Video
+                                </span>
+                                
+                                <button onclick="redirectToGoogleForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 text-white rounded-2xl font-bold text-xs shadow-md shadow-emerald-500/20 hover:shadow-lg transition-all flex items-center gap-2 border border-white/40 active:scale-95">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                    <span>Mở Google Form</span>
+                                </button>
+                            </div>
+
+                            <div class="mt-2 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 rounded-2xl p-2.5 px-3.5 flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                                    <span>Vì Form chứa tính năng <strong>Tải tệp video lên</strong>, Google yêu cầu mở trong cửa sổ chính thức để chọn file không bị lỗi.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 w-full h-[400px] sm:h-full rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-950/40 relative mt-2 border border-slate-200/60 dark:border-slate-800">
+                                <iframe id="google-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdKU0MhaEq04c-FW6ThadJKlZdd7reORpXYyXUj9ml9NMXg8w/viewform?embedded=true" class="w-full h-full border-0 rounded-2xl" allow="autoplay"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- BẢN QUYỀN CHÂN TRANG -->
-            <footer class="pt-6 pb-2 border-t border-slate-200/60 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
+            <!-- BẢN QUYỀN CHÂN TRANG (HIỂN THỊ CỐ ĐỊNH CHO TẤT CẢ CÁC TAB) -->
+            <footer class="pt-4 sm:pt-6 pb-2 border-t border-slate-200/60 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1 shrink-0 mt-6">
                 <p class="font-semibold">© 2026 Hệ Thống Quản Lý & Lưu Trữ Video Bài Giảng Mầm Non</p>
                 <p class="text-[11px] opacity-75">Google Drive Cloud, Google Form & Google Sheet Database</p>
             </footer>
@@ -350,31 +373,31 @@
 </div>
 
 <!-- WELCOME / GUIDE MODAL (UPGRADED LIKE UPLOAD TAB WITH BIGGER VIDEO & STEP LAYOUT) -->
-<div id="guide-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center hidden p-3 md:p-5">
-    <div class="glass-card bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white rounded-3xl w-full h-full max-w-6xl max-h-[92vh] p-4 md:p-6 shadow-2xl border border-white dark:border-slate-800 flex flex-col justify-between space-y-4 overflow-hidden">
+<div id="guide-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center hidden p-2.5 sm:p-4 md:p-5">
+    <div class="glass-card bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white rounded-3xl w-full h-full max-w-6xl max-h-[94vh] sm:max-h-[92vh] p-3.5 sm:p-5 md:p-6 shadow-2xl border border-white dark:border-slate-800 flex flex-col justify-between space-y-3.5 sm:space-y-4 overflow-hidden">
         <!-- HEADER POPUP -->
-        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-500 text-white flex items-center justify-center font-bold shadow-md">
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5 sm:pb-3 shrink-0">
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-500 text-white flex items-center justify-center font-bold shadow-md shrink-0">
+                    <i data-lucide="sparkles" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-extrabold text-lg md:text-xl text-slate-900 dark:text-white tracking-tight">Hướng Dẫn Sử Dụng Hệ Thống</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Video hướng dẫn trực quan & từng bước thao tác chi tiết</p>
+                    <h3 class="font-extrabold text-base sm:text-lg md:text-xl text-slate-900 dark:text-white tracking-tight">Hướng Dẫn Sử Dụng Hệ Thống</h3>
+                    <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Video hướng dẫn trực quan & từng bước thao tác chi tiết</p>
                 </div>
             </div>
-            <button onclick="closeGuideModal()" class="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all">
-                <i data-lucide="x" class="w-6 h-6"></i>
+            <button onclick="closeGuideModal()" class="p-1.5 sm:p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all">
+                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </button>
         </div>
 
         <!-- POPUP CONTENT (2 COLUMNS: LEFT SMALL STEPS, RIGHT LARGE VIDEO) -->
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 min-h-0 overflow-hidden">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3.5 md:gap-5 min-h-0 overflow-y-auto lg:overflow-hidden pr-1">
             
             <!-- LEFT COLUMN (SMALLER - 4 COLS) -->
-            <div class="lg:col-span-4 flex flex-col space-y-3.5 overflow-y-auto pr-1">
+            <div class="lg:col-span-4 flex flex-col space-y-3.5 lg:overflow-y-auto">
                 <!-- STEP BOX -->
-                <div class="glass-card rounded-2xl p-4 border border-sky-100 dark:border-slate-800 space-y-3 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
+                <div class="glass-card rounded-2xl p-3.5 sm:p-4 border border-sky-100 dark:border-slate-800 space-y-3 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
                     <div class="flex items-center gap-2 pb-2 border-b border-sky-100 dark:border-slate-800">
                         <div class="w-7 h-7 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold shadow-xs">
                             <i data-lucide="list-checks" class="w-4 h-4"></i>
@@ -401,7 +424,7 @@
                 </div>
 
                 <!-- ADMIN NOTICE BOX -->
-                <div class="glass-card rounded-2xl p-4 border border-purple-100 dark:border-slate-800 space-y-2 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80 min-h-[140px]">
+                <div class="glass-card rounded-2xl p-3.5 sm:p-4 border border-purple-100 dark:border-slate-800 space-y-2 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80 min-h-[140px]">
                     <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-1.5">
                         <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                             <i data-lucide="pin" class="w-3.5 h-3.5 text-purple-500"></i>
@@ -414,8 +437,8 @@
             </div>
 
             <!-- RIGHT COLUMN (LARGER - 8 COLS) FOR BIG TUTORIAL VIDEO -->
-            <div class="lg:col-span-8 flex flex-col h-full min-h-[300px]">
-                <div class="glass-card rounded-2xl p-2.5 md:p-3 border border-sky-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-black overflow-hidden relative border border-slate-800">
+            <div class="lg:col-span-8 flex flex-col h-[240px] sm:h-[320px] lg:h-full min-h-[220px]">
+                <div class="glass-card rounded-2xl p-2 md:p-3 border border-sky-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-black overflow-hidden relative border border-slate-800">
                     <div class="w-full h-full flex items-center justify-center relative">
                         <video id="guide-tutorial-video" controls autoplay playsinline loop preload="auto" class="w-full h-full object-contain rounded-xl">
                             <source src="./video.mp4" type="video/mp4">
@@ -428,9 +451,9 @@
         </div>
 
         <!-- POPUP FOOTER -->
-        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
-            <span class="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">Bạn có thể xem lại hướng dẫn bất kỳ lúc nào bằng cách bấm nút Hướng Dẫn ở góc trên.</span>
-            <button onclick="closeGuideModal()" class="px-6 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-bold rounded-xl text-xs md:text-sm shadow-md transition-all ml-auto">
+        <div class="pt-2.5 sm:pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+            <span class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">Bạn có thể xem lại hướng dẫn bất kỳ lúc nào bằng cách bấm nút Hướng Dẫn ở góc trên.</span>
+            <button onclick="closeGuideModal()" class="px-5 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-bold rounded-xl text-xs md:text-sm shadow-md transition-all ml-auto">
                 Đóng
             </button>
         </div>
@@ -551,6 +574,7 @@
     let currentPlayingVideoId = null;
     let guideFadeInterval = null;
 
+    // Khai báo lại biến appData lưu trữ trạng thái ứng dụng & cache dữ liệu
     let appData = JSON.parse(localStorage.getItem('mn_video_app_data')) || {
         months: [
             { id: 'Tháng 9', name: 'Tháng 9' },
@@ -568,6 +592,25 @@
         lastFetched: 0
     };
 
+    // Toggle Mobile Sidebar Drawer
+    function toggleMobileSidebar(forceState) {
+        const sidebar = document.getElementById('main-sidebar');
+        const backdrop = document.getElementById('mobile-sidebar-backdrop');
+        
+        if (!sidebar || !backdrop) return;
+
+        const isCurrentlyOpen = !sidebar.classList.contains('-translate-x-full');
+        const shouldOpen = forceState !== undefined ? forceState : !isCurrentlyOpen;
+
+        if (shouldOpen) {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        }
+    }
+
     /**
      * Hàm làm sạch tiêu đề video:
      * Loạii bỏ phần tên Gmail/người gửi sau dấu "-" hoặc "–"
@@ -577,11 +620,8 @@
         if (!rawTitle) return '';
         let cleaned = String(rawTitle).trim();
 
-        // 1. Loại bỏ các đuôi mở rộng tệp video phổ biến ở cuối chuỗi
         cleaned = cleaned.replace(/\.(mp4|mov|avi|mkv|flv|wmv|webm)$/i, '');
 
-        // 2. Tách theo các loại dấu gạch ngang (bao gồm cả khoảng trắng xung quanh hoặc không)
-        // Tìm vị trí dấu '-' hoặc '–' hoặc '—'
         const splitIndex = cleaned.search(/\s*[-–—]\s*/);
         if (splitIndex !== -1) {
             cleaned = cleaned.substring(0, splitIndex).trim();
@@ -952,6 +992,12 @@
     function selectClass(classId) {
         currentClassId = classId;
         renderClassList();
+        
+        // Tự động đóng Mobile Sidebar sau khi chọn lớp trên thiết bị di động
+        if (window.innerWidth < 1024) {
+            toggleMobileSidebar(false);
+        }
+
         if (activeTab === 'upload') {
             switchToHomeTab();
         } else {
