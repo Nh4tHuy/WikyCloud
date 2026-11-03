@@ -139,8 +139,7 @@
             </div>
             <div class="min-w-0">
                 <h1 class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-lg md:text-xl tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600 dark:from-sky-400 dark:to-indigo-400 truncate">WIKY CLOUD</h1>
-
-             <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-0.5 sm:mt-1 truncate max-w-[140px] sm:max-w-none">Kho Video Bài Giảng Mầm Non</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-0.5 sm:mt-1 truncate max-w-[140px] sm:max-w-none">Kho Video Bài Giảng Mầm Non</p>
             </div>
         </div>
     </div>
@@ -186,15 +185,16 @@
 
         <div class="flex-1 overflow-y-auto p-3.5 sm:p-4 md:p-5 space-y-4">
             
-            <!-- WIDGET TIỆN ÍCH ĐIỀU HƯỚNG NHANH -->
+            <!-- WIDGET TIỆN ÍCH ĐIỀU HƯỚNG NHANH (BỎ TAB TẢI VIDEO - MỞ TRỰC TIẾP GOOGLE FORM) -->
             <div class="bg-gradient-to-br from-sky-50/90 via-purple-50/80 to-pink-50/90 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-2.5 sm:p-3 rounded-2xl border border-sky-100/80 dark:border-slate-700 shadow-glass-sm space-y-2">
                 <div class="grid grid-cols-3 gap-1.5">
                     <button onclick="switchToHomeTab()" id="widget-home-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-sky-100 hover:bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 shadow-xs hover:scale-[1.02]">
                         <i data-lucide="home" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
                         <span class="text-[11px]">Trang chủ</span>
                     </button>
-                    <button onclick="switchToUploadTab()" id="widget-upload-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 shadow-xs hover:scale-[1.02]">
-                        <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
+                    <!-- Nút Tải Video mở trực tiếp Google Form -->
+                    <button onclick="redirectToGoogleForm()" id="widget-upload-btn" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 shadow-xs hover:scale-[1.02]">
+                        <i data-lucide="external-link" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
                         <span class="text-[11px]">Tải Video</span>
                     </button>
                     <button onclick="forceRefreshData()" class="p-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 shadow-xs hover:scale-[1.02]">
@@ -250,7 +250,7 @@
         <div class="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 flex flex-col justify-between max-w-full">
 
             <div class="space-y-5 sm:space-y-6 flex-1 w-full max-w-full">
-                <!-- TAB 1: KHU VỰC TRANG CHỦ & DANH SÁCH VIDEO -->
+                <!-- KHU VỰC TRANG CHỦ & DANH SÁCH VIDEO -->
                 <div id="home-tab-view" class="space-y-5 sm:space-y-6 w-full max-w-full">
                     <!-- SEARCH & FILTER MONTH BAR -->
                     <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 bg-white/60 dark:bg-slate-900/60 p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-glass-sm backdrop-blur-md w-full">
@@ -289,81 +289,9 @@
                         </div>
                         <h3 class="font-bold text-slate-700 dark:text-slate-200 text-lg">Chưa Có Video Bài Giảng Nào</h3>
                         <p class="text-xs md:text-sm text-slate-500 max-w-md leading-relaxed">Giáo viên vui lòng gửi video bằng cách nhấn vào nút "Tải Video" tại Widget điều hướng bên trái.</p>
-                        <button onclick="switchToUploadTab()" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-xs md:text-sm rounded-2xl shadow-md hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                            <i data-lucide="upload-cloud" class="w-4 h-4"></i> Tải Video Lên
+                        <button onclick="redirectToGoogleForm()" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-xs md:text-sm rounded-2xl shadow-md hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                            <i data-lucide="external-link" class="w-4 h-4"></i> Tải Video Lên
                         </button>
-                    </div>
-                </div>
-
-                <!-- TAB 2: KHU VỰC TẢI VIDEO LÊN -->
-                <div id="upload-tab-view" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 min-h-[500px]">
-                    <div class="lg:col-span-4 flex flex-col space-y-4">
-                        <div class="glass-card rounded-3xl p-4 sm:p-5 border border-sky-100 dark:border-slate-800 space-y-4 shadow-glass-card bg-gradient-to-br from-white/90 via-sky-50/40 to-indigo-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
-                            <div class="flex items-center gap-2.5 pb-2.5 border-b border-sky-100 dark:border-slate-800">
-                                <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold shadow-xs">
-                                    <i data-lucide="file-text" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Hướng dẫn</h3>
-                                    <p class="text-[11px] text-slate-500">Các bước tải bài giảng lên hệ thống</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-3 text-xs text-slate-700 dark:text-slate-300">
-                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                    <span class="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 font-extrabold flex items-center justify-center text-xs shrink-0">1</span>
-                                    <p><strong class="text-slate-900 dark:text-white block">Mở Google Form: </strong> Nhấp vào nút <strong>"Mở Google Form"</strong> hoặc <strong>"Điền biểu mẫu"</strong> màu xanh để truy cập link tải lên video.</p>
-                                </div>
-
-                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                    <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs shrink-0">2</span>
-                                    <p><strong class="text-slate-900 dark:text-white block">Nhập thông tin: </strong> Chọn chính xác <strong>Lớp giảng dạy</strong> và <strong>Tháng lưu trữ</strong> rồi nhấp vào nút <strong>Tiếp</strong>.</p>
-                                </div>
-
-                                <div class="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-sky-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
-                                    <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 font-extrabold flex items-center justify-center text-xs shrink-0">3</span>
-                                    <p><strong class="text-slate-900 dark:text-white block">Gửi video:</strong> Nhấn nút <strong>Thêm tệp</strong> rồi chọn <strong>Duyệt qua</strong> để lựa chọn video tải lên. Sau khi hoàn tất nhấp vào nút <strong>Gửi</strong>.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="glass-card rounded-3xl p-4 sm:p-5 border border-purple-100 dark:border-slate-800 space-y-3 shadow-glass-card flex-1 flex flex-col bg-gradient-to-br from-white/90 via-purple-50/30 to-pink-50/30 dark:from-slate-900/90 dark:to-slate-800/80">
-                            <div class="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-2">
-                                <span class="font-extrabold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                    <i data-lucide="pin" class="w-4 h-4 text-purple-500"></i>
-                                    Ghi Chú
-                                </span>
-                            </div>
-                            <div class="admin-notice-content text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-2 font-medium overflow-y-auto max-h-[180px] pr-1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-8 flex flex-col min-h-[480px] sm:min-h-[580px]">
-                        <div class="glass-card rounded-3xl p-3 md:p-4 border border-emerald-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-white/90 dark:bg-slate-900/90 overflow-hidden relative">
-                            <div class="flex flex-wrap items-center justify-between gap-2 px-2 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300">
-                                <span class="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-sm">
-                                    <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i>
-                                    Tải lên Video
-                                </span>
-                                
-                                <button onclick="redirectToGoogleForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 text-white rounded-2xl font-bold text-xs shadow-md shadow-emerald-500/20 hover:shadow-lg transition-all flex items-center gap-2 border border-white/40 active:scale-95">
-                                    <i data-lucide="external-link" class="w-4 h-4"></i>
-                                    <span>Mở Google Form</span>
-                                </button>
-                            </div>
-
-                            <div class="mt-2 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 rounded-2xl p-2.5 px-3.5 flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 shadow-2xs">
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
-                                    <span>Vì Form chứa tính năng <strong>Tải tệp video lên</strong>, Google yêu cầu mở trong cửa sổ chính thức để chọn file không bị lỗi.</span>
-                                </div>
-                            </div>
-
-                            <div class="flex-1 w-full h-[400px] sm:h-full rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-950/40 relative mt-2 border border-slate-200/60 dark:border-slate-800">
-                                <iframe id="google-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdKU0MhaEq04c-FW6ThadJKlZdd7reORpXYyXUj9ml9NMXg8w/viewform?embedded=true" class="w-full h-full border-0 rounded-2xl" allow="autoplay"></iframe>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -378,7 +306,7 @@
     </main>
 </div>
 
-<!-- WELCOME / GUIDE MODAL (TỐI ƯU KHUNG HÌNH MOBILE KHÔNG BỊ TRÀN) -->
+<!-- WELCOME / GUIDE MODAL -->
 <div id="guide-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center hidden p-2 sm:p-4 md:p-5 overflow-hidden">
     <div class="glass-card bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white rounded-3xl w-full h-full max-w-6xl max-h-[92dvh] sm:max-h-[92vh] p-3 sm:p-5 md:p-6 shadow-2xl border border-white dark:border-slate-800 flex flex-col justify-between space-y-3 overflow-hidden">
         <!-- HEADER POPUP -->
@@ -489,7 +417,7 @@
     </div>
 </div>
 
-<!-- VIDEO PLAYER PREVIEW MODAL (TỐI ƯU CĂN KHUNG HÌNH TRÊN MOBILE) -->
+<!-- VIDEO PLAYER PREVIEW MODAL -->
 <div id="player-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-2 sm:p-4 md:p-5 overflow-hidden">
     <div class="glass-card bg-white dark:bg-slate-900 text-slate-800 dark:text-white rounded-3xl w-full h-full max-w-6xl max-h-[94dvh] sm:max-h-[96vh] p-3 sm:p-5 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-3 overflow-hidden">
         <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3 border-b border-slate-200 dark:border-slate-800 pb-2.5 shrink-0">
@@ -527,8 +455,23 @@
     </div>
 </div>
 
+<!-- WIDGET GIF TRANG TRÍ Ở GÓC DƯỚI BÊN PHẢI (FILE meme.gif) -->
+<div id="corner-gif-widget" class="fixed bottom-3 right-3 z-30 transition-all duration-300 flex flex-col items-end pointer-events-auto">
+    <!-- Nút đóng/ẩn nhẹ Gif -->
+    <button onclick="toggleCornerGif()" id="corner-gif-toggle-btn" class="mb-1 p-1 bg-white/80 dark:bg-slate-800/80 hover:bg-rose-500 hover:text-white rounded-full shadow-md text-slate-500 transition-colors backdrop-blur-md border border-slate-200 dark:border-slate-700" title="Ẩn/Mở Gif trang trí">
+        <i data-lucide="x" class="w-3.5 h-3.5" id="corner-gif-icon"></i>
+    </button>
+    
+    <!-- Container chứa ảnh GIF meme.gif -->
+    <div id="corner-gif-container" class="relative group cursor-pointer transition-transform hover:scale-105 active:scale-95" onclick="openGuideModal()" title="Bấm vào để mở Hướng Dẫn">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/80 dark:border-slate-700 bg-slate-900/40 backdrop-blur-sm">
+            <img src="./meme.gif" alt="Wiky Cloud Gif" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnFlMnI4bGFsZnV0Nnh5NDBveHNvdnlwNDRsa2t5eG02Y200bnZxeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSjRrfIPjeiVyM/giphy.gif'">
+        </div>
+    </div>
+</div>
+
 <!-- TOAST NOTIFICATIONS -->
-<div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-[90vw]"></div>
+<div id="toast-container" class="fixed bottom-16 right-3 sm:bottom-6 sm:right-6 z-50 flex flex-col gap-2.5 max-w-[90vw]"></div>
 
 <script>
     // Cấu hình Ghi chú Nhắc Nhở cố định do Admin thiết lập
@@ -571,12 +514,12 @@
         { id: 'm8', name: 'Mầm 8' }
     ];
 
-    let activeTab = 'home';
     let currentRole = localStorage.getItem('mn_admin_authenticated') === 'true' ? 'admin' : 'teacher';
     let currentMonthFilter = 'all'; 
     let currentClassId = 'all';
     let currentPlayingVideoId = null;
     let guideFadeInterval = null;
+    let isCornerGifOpen = true;
 
     let appData = JSON.parse(localStorage.getItem('mn_video_app_data')) || {
         months: [
@@ -594,6 +537,24 @@
         hasSeenGuide: false,
         lastFetched: 0
     };
+
+    function toggleCornerGif() {
+        const gifContainer = document.getElementById('corner-gif-container');
+        const icon = document.getElementById('corner-gif-icon');
+        const btn = document.getElementById('corner-gif-toggle-btn');
+        
+        isCornerGifOpen = !isCornerGifOpen;
+        if (isCornerGifOpen) {
+            gifContainer.classList.remove('hidden');
+            icon.setAttribute('data-lucide', 'x');
+            btn.title = "Ẩn Gif trang trí";
+        } else {
+            gifContainer.classList.add('hidden');
+            icon.setAttribute('data-lucide', 'image');
+            btn.title = "Hiện Gif trang trí";
+        }
+        lucide.createIcons();
+    }
 
     function toggleMobileSidebar(forceState) {
         const sidebar = document.getElementById('main-sidebar');
@@ -705,20 +666,7 @@
     }
 
     function switchToHomeTab() {
-        activeTab = 'home';
-        document.getElementById('home-tab-view').classList.remove('hidden');
-        document.getElementById('upload-tab-view').classList.add('hidden');
-
         loadCurrentClassWorkspace();
-    }
-
-    function switchToUploadTab() {
-        activeTab = 'upload';
-        document.getElementById('home-tab-view').classList.add('hidden');
-        document.getElementById('upload-tab-view').classList.remove('hidden');
-
-        document.getElementById('current-class-title').innerText = "Tải Video Lên";
-        document.getElementById('current-month-subtitle').innerText = "Tải bài giảng lên hệ thống qua Google Form";
     }
 
     function normalizeMonthId(rawMonth) {
@@ -961,11 +909,7 @@
             toggleMobileSidebar(false);
         }
 
-        if (activeTab === 'upload') {
-            switchToHomeTab();
-        } else {
-            loadCurrentClassWorkspace();
-        }
+        loadCurrentClassWorkspace();
     }
 
     function getAllVideosList() {
@@ -1025,8 +969,6 @@
     }
 
     function loadCurrentClassWorkspace() {
-        if (activeTab === 'upload') return;
-
         const cls = PRESCHOOL_CLASSES.find(c => c.id === currentClassId);
         const month = appData.months.find(m => m.id === currentMonthFilter);
 
@@ -1136,7 +1078,6 @@
         lucide.createIcons();
     }
 
-    // RENDER CARD VIDEO: NÚT MỞ VIDEO CỦA GIÁO VIÊN ĐÃ ĐƯỢC CĂN TRÀN RỘNG TOÀN KHUNG CARD (w-full)
     function renderVideoCardHtml(vid) {
         const isApproved = vid.approved === true;
 
@@ -1170,7 +1111,6 @@
                 </div>
             `;
         } else {
-            // Nút mở video ngang khung card đối với giáo viên
             bottomActionsHtml = `
                 <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-center text-xs font-semibold w-full">
                     <button onclick="window.open('${driveOpenUrl}')" class="w-full py-2 bg-gradient-to-tr from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all">
