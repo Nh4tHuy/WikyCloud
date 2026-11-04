@@ -397,10 +397,8 @@
             <div class="lg:col-span-8 flex flex-col min-h-[200px] sm:min-h-[280px] lg:h-full">
                 <div class="glass-card rounded-2xl p-1.5 md:p-2 border border-sky-100 dark:border-slate-800 shadow-glass-card flex-1 flex flex-col bg-black overflow-hidden relative">
                     <div class="w-full h-full flex items-center justify-center relative min-h-[200px]">
-                        <video id="guide-tutorial-video" controls autoplay playsinline loop preload="auto" class="w-full h-full object-contain rounded-xl max-h-[60vh]">
-                            <source src="./video.mp4" type="video/mp4">
-                            Trình duyệt của bạn không hỗ trợ thẻ video.
-                        </video>
+                        <!-- NHÚNG TRỰC TIẾP VIDEO GOOGLE DRIVE -->
+                        <iframe id="guide-tutorial-video" src="https://drive.google.com/file/d/180ltsbxDSGBJW_QuzwhCWxWqfuU-3y8n/preview" class="w-full h-full rounded-xl min-h-[300px] sm:min-h-[400px] max-h-[60vh] border-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -614,8 +612,9 @@
     // URL Thumbnail mặc định
     const DEFAULT_THUMBNAIL_URL = "https://cdn.phototourl.com/member/2026-10-30-92e8d91a-68f6-47b4-8c80-e8565d5d795c.png";
 
-    // URL Video Hướng Dẫn
-    const GUIDE_VIDEO_DRIVE_URL = "https://drive.google.com";
+    // URL Video Hướng Dẫn Google Drive
+    const GUIDE_VIDEO_DRIVE_URL = "https://drive.google.com/file/d/180ltsbxDSGBJW_QuzwhCWxWqfuU-3y8n/view?usp=drive_link";
+    const GUIDE_VIDEO_EMBED_URL = "https://drive.google.com/file/d/180ltsbxDSGBJW_QuzwhCWxWqfuU-3y8n/preview";
 
     const PRESCHOOL_CLASSES = [
         { id: 'all', name: 'Trang chủ' },
@@ -636,7 +635,6 @@
     let currentMonthFilter = 'all'; 
     let currentClassId = 'all';
     let currentPlayingVideoId = null;
-    let guideFadeInterval = null;
     let isCornerGifOpen = true;
 
     // Timer đếm ngược xóa của giáo viên
@@ -846,51 +844,23 @@
 
     function openGuideModal() {
         const guideModal = document.getElementById('guide-modal');
-        const guideVideo = document.getElementById('guide-tutorial-video');
-        guideModal.classList.remove('hidden');
+        const guideIframe = document.getElementById('guide-tutorial-video');
         
-        if (guideVideo) {
-            if (guideFadeInterval) clearInterval(guideFadeInterval);
-            
-            guideVideo.currentTime = 0;
-            guideVideo.muted = false;
-            guideVideo.volume = 0.15;
-
-            const playPromise = guideVideo.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    const durationMs = 5000;
-                    const stepMs = 100;
-                    const steps = durationMs / stepMs;
-                    const volumeIncrement = (1.0 - 0.15) / steps;
-
-                    guideFadeInterval = setInterval(() => {
-                        if (guideVideo.volume + volumeIncrement < 1.0) {
-                            guideVideo.volume += volumeIncrement;
-                        } else {
-                            guideVideo.volume = 1.0;
-                            clearInterval(guideFadeInterval);
-                        }
-                    }, stepMs);
-                }).catch(err => {
-                    console.warn("Autoplay with audio was prevented, trying muted:", err);
-                    guideVideo.muted = true;
-                    guideVideo.play().catch(() => {});
-                });
-            }
+        if (guideIframe) {
+            guideIframe.src = GUIDE_VIDEO_EMBED_URL;
         }
+
+        guideModal.classList.remove('hidden');
     }
 
     function closeGuideModal() {
         const guideModal = document.getElementById('guide-modal');
-        const guideVideo = document.getElementById('guide-tutorial-video');
+        const guideIframe = document.getElementById('guide-tutorial-video');
         
-        if (guideFadeInterval) clearInterval(guideFadeInterval);
-
-        if (guideVideo) {
-            guideVideo.pause();
+        if (guideIframe) {
+            guideIframe.src = '';
         }
-        
+
         guideModal.classList.add('hidden');
         appData.hasSeenGuide = true;
         saveAppData();
